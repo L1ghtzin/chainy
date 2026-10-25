@@ -24,10 +24,9 @@ export default {
   }) => {
     if (!isGroup) return reply(MESSAGES.permission.groupOnly);
     
-    // O sistema de relacionamentos usa o 'isModoBn' (Modo Brincadeira) no index.js original
-    // mas aqui estamos usando groupData.modorpg ou similar se for parte do RPG.
-    // No index.js estava usando !isModoBn.
-    const isModoBn = groupData.modobn || groupData.modobrincadeira || true; 
+    // Ativo por padrão (?? true), mas respeita o !modobn do grupo quando
+    // o admin desativou explicitamente (o "|| true" antigo ignava o toggle)
+    const isModoBn = groupData.modobn ?? groupData.modobrincadeira ?? true;
     if (!isModoBn) return reply(MESSAGES.rpg.relationship.disableBn);
 
 

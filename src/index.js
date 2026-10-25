@@ -45,7 +45,8 @@ try { packageJson = JSON.parse(fs.readFileSync(PACKAGE_JSON_PATH, 'utf-8')); } c
 const botVersion = packageJson.version;
 
 initJidLidCache(JID_LID_CACHE_FILE);
-setInterval(() => saveJidLidCache(), 5 * 60 * 1000);
+// unref(): não mantém o processo vivo sozinho (o socket de conexão é quem segura o loop)
+setInterval(() => saveJidLidCache(), 5 * 60 * 1000).unref();
 
 // Deduplicação de mensagens recentes
 const processedMessages = new Set();

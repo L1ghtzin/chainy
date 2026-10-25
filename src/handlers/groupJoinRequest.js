@@ -93,7 +93,7 @@ export async function handleGroupJoinRequest(ChainySock, inf) {
 
         const antifakeResult = await checkAntifake(participantJid, groupSettings, ChainySock);
         if (!antifakeResult.allowed) {
-            console.log(`🛡️ [AntiFake] Rejeitando: ${participantJid} (${antifakeResult.number})`);
+            if (DEBUG_MODE) console.log(`🛡️ [AntiFake] Rejeitando: ${participantJid} (${antifakeResult.number})`);
             try {
                 await ChainySock.groupRequestParticipantsUpdate(from, [participantJid], 'reject');
             } catch (err) {

@@ -330,13 +330,15 @@ O aluguel deste grupo expirou e o bot está saindo agora. Para voltar a usar o b
 
   async getOwnerInfo() {
     try {
-      // Use owner number from config or fallback to environment variable
+      // Use owner number from config or fallback to environment variable.
+      // Sem numero configurado devolvemos vazio — nunca inventar um numero
+      // de terceiro (5511999999999) para exibir em notificacoes.
       const name = this.ownerName || process.env.OWNER_NAME || 'Dono do Bot';
-      const number = this.ownerNumber || process.env.OWNER_NUMBER || '5511999999999';
-      let contact = `${number}@s.whatsapp.net`;
+      const number = this.ownerNumber || process.env.OWNER_NUMBER || '';
+      let contact = number ? `${number}@s.whatsapp.net` : null;
 
       // If bot and helpers available, try to normalize contact to LID
-      if (this.bot && typeof this.bot.onWhatsApp === 'function') {
+      if (number && this.bot && typeof this.bot.onWhatsApp === 'function') {
         try {
           const cleanNumber = number.toString().replace(/\D/g, '');
           const [res] = await this.bot.onWhatsApp(cleanNumber);
@@ -357,8 +359,8 @@ O aluguel deste grupo expirou e o bot está saindo agora. Para voltar a usar o b
       console.error('❌ Error getting owner info:', error);
       return {
         name: this.ownerName || 'Dono do Bot',
-        number: this.ownerNumber || '5511999999999',
-        contact: `${this.ownerNumber || '5511999999999'}@s.whatsapp.net`
+        number: this.ownerNumber || '',
+        contact: null
       };
     }
   }

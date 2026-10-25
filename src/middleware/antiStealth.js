@@ -144,6 +144,12 @@ export async function processAntiStealth(ChainySock, m) {
         if (state.stealthTimestamps.length < threshold) continue;
 
         recentlyPunished.set(punishKey, now);
+        // Poda entradas fora da janela de cooldown para o Map não crescer sem limite
+        if (recentlyPunished.size > 500) {
+            for (const [key, ts] of recentlyPunished) {
+                if (now - ts >= PUNISHMENT_COOLDOWN_MS) recentlyPunished.delete(key);
+            }
+        }
         cfg.stats.detected++;
         state.stealthTimestamps = [];
 

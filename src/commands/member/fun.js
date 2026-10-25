@@ -83,7 +83,9 @@ export default {
       return reply(MESSAGES.member.fun.niverSuccess(sender.split('@')[0], q), { mentions: [sender] });
     }
 
-    const isModoBn = groupData.modobn || groupData.modobrincadeira || true;
+    // Ativo por padrão (?? true), mas respeita o !modobn do grupo quando
+    // o admin desativou explicitamente (o "|| true" antigo ignava o toggle)
+    const isModoBn = groupData.modobn ?? groupData.modobrincadeira ?? true;
     if (!isModoBn) return reply(MESSAGES.error.modoBnDisabled);
 
     // --- CHANCE ---

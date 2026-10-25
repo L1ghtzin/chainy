@@ -193,13 +193,32 @@ function addCaptcha(obj, groupId, answer, expiresAt, userlid, groupFile = null) 
 
 
 /**
+ * Libera as entradas correspondentes no global.CAPTCHA_LOCK.
+ * Sem isso o Set global crescia indefinidamente (uma entrada por
+ * usuário que passou por captcha no ciclo de vida do processo).
+ * @param {object} captcha - Dados do captcha removido
+ */
+function releaseCaptchaLock(captcha) {
+   if (!captcha || !global.CAPTCHA_LOCK) return;
+   const variants = new Set(
+      [captcha.id, captcha.lid, captcha.participant, captcha.idOrigin]
+         .filter(Boolean)
+         .map(String)
+         .flatMap((key) => [key, `${key.replace(/@.*/, '')}@s.whatsapp.net`])
+   );
+   for (const variant of variants) global.CAPTCHA_LOCK.delete(variant);
+}
+
+/**
  * Remove um captcha do índice
  * @param {string} userId - ID do usuário
  * @returns {boolean}
  */
 function removeCaptcha(userId) {
-   if (getCaptcha(userId)) {
+   const captcha = getCaptcha(userId);
+   if (captcha) {
       captchaIndex.delete(userId);
+      releaseCaptchaLock(captcha);
       saveIndex(true);
       return true;
    }
@@ -262,6 +281,7 @@ function cleanupExpired(cb) {
    for (const [userId, captcha] of captchaIndex) {
       if (now >= captcha.expiresAt) {
          cb(captcha);
+         releaseCaptchaLock(captcha);
          captchaIndex.delete(userId);
          cleaned++;
       }
