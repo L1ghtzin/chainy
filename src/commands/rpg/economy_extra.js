@@ -1,5 +1,10 @@
 import { timeLeft, resolveParamAlias, findKeyIgnoringAccents, normalizeParam } from "../../utils/helpers.js";
 
+// Intervalo entre sorteios automáticos da loteria (24h). O sorteio roda na
+// primeira interação com !loteria após o vencimento — não precisa de cron.
+const LOTTERY_DRAW_INTERVAL_MS = 24 * 60 * 60 * 1000;
+const LOTTERY_BASE_JACKPOT = 100000;
+
 export default {
   name: "rpg-extra",
   description: "Sistemas extras de economia do RPG",
@@ -30,10 +35,34 @@ export default {
     // --- LOTERIA ---
     if (command === 'loteria' || command === 'lottery' || command === 'mega') {
       if (!econ.lottery) {
-        econ.lottery = { jackpot: 100000, tickets: {}, lastDraw: Date.now() };
+        econ.lottery = { jackpot: LOTTERY_BASE_JACKPOT, tickets: {}, lastDraw: Date.now() };
       } else if (!econ.lottery.tickets) {
         econ.lottery.tickets = {};
       }
+
+      // Sorteio automático: vencido o intervalo, sorteia entre os bilhetes
+      // (chance proporcional à quantidade) e reseta a rodada
+      if (Date.now() - (econ.lottery.lastDraw || 0) >= LOTTERY_DRAW_INTERVAL_MS) {
+        const entries = Object.entries(econ.lottery.tickets).filter(([, qty]) => qty > 0);
+        if (entries.length > 0) {
+          const totalTickets = entries.reduce((acc, [, qty]) => acc + qty, 0);
+          let roll = Math.random() * totalTickets;
+          let winnerJid = entries[0][0];
+          for (const [jid, qty] of entries) {
+            roll -= qty;
+            if (roll <= 0) { winnerJid = jid; break; }
+          }
+          const prize = econ.lottery.jackpot;
+          const winnerUser = getEcoUser(econ, winnerJid);
+          winnerUser.wallet += prize;
+          econ.lottery = { jackpot: LOTTERY_BASE_JACKPOT, tickets: {}, lastDraw: Date.now() };
+          saveEconomy(econ);
+          await reply(MESSAGES.rpg.economy.lotteryDrawn(winnerJid.split('@')[0], prize.toLocaleString()), { mentions: [winnerJid] });
+        } else {
+          econ.lottery.lastDraw = Date.now();
+        }
+      }
+
       const sub = args[0]?.toLowerCase();
       
       if (!sub || sub === 'ver') {

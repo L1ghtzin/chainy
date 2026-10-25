@@ -417,7 +417,8 @@ export const rpgMessages = {
   
   economy: {
     noAuctions: '🏛️ Nenhum leilão ativo.',
-    lotteryHeader: (jackpot, tickets, prefix) => `╭━━━⊱ 🎫 *LOTERIA* ⊱━━━╮\n💰 Jackpot: ${jackpot}\n🎟️ Seus bilhetes: ${tickets}\n💵 Preço: 10.000/cada\n\n💡 Use ${prefix}loteria comprar <qtd>`,
+    lotteryHeader: (jackpot, tickets, prefix) => `╭━━━⊱ 🎫 *LOTERIA* ⊱━━━╮\n💰 Jackpot: ${jackpot}\n🎟️ Seus bilhetes: ${tickets}\n💵 Preço: 10.000/cada\n🗓️ Sorteio: todo dia (1 bilhete = 1 chance)\n\n💡 Use ${prefix}loteria comprar <qtd>`,
+    lotteryDrawn: (winner, prize) => `🎉 *SORTEIO DA LOTERIA!* 🎉\n\n🏆 Vencedor: @${winner}\n💰 Prêmio: ${prize} moedas!\n\n🎲 Nova rodada aberta — jackpot resetado. Compre seus bilhetes!`,
     insufficientFunds: '💰 Saldo insuficiente!',
     boughtTickets: (qty) => `✅ Você comprou ${qty} bilhetes!`,
     raceUsage: (prefix) => `💡 Use ${prefix}corrida <valor> <1-5>`,
