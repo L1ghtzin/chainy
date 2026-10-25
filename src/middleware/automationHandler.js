@@ -3,9 +3,9 @@
 export async function processAutomation(context) {
     const { 
         bot, info, isGroup, sender, groupData, type, budy2, body, isCmd, isGroupAdmin, isBotAdmin, 
-        from, getUserName, isUserWhitelisted, reply, getMediaInfo, getFileBuffer, upload, 
+        from, getUserName, isUserWhitelisted, reply, getMediaInfo, getFileBuffer, upload,
         handleAutoDownload, youtube, tiktok, igdl, kwai, facebook, pinterest, spotify, soundcloud,
-        sendSticker, pushname, nomebot, nomedono, antifloodData, MESSAGES
+        sendSticker, pushname, nomebot, nomedono, antifloodData, MESSAGES, persistGroupData
     } = context;
 
 

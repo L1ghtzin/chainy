@@ -1,3 +1,5 @@
+import { menuVIP } from '../../views/menuvip.js';
+
 export default {
   name: "vip_info",
   description: "Consulta informaÃ§Ãµes e menus de comandos VIP",
@@ -8,7 +10,6 @@ export default {
     isPremium,
     prefix,
     pushname,
-    menuVIP,
     getMenuDesignWithDefaults,
     nomebot,
     MESSAGES

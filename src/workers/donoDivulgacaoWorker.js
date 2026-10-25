@@ -5,6 +5,7 @@ import { normalizeScheduleTime, getTodayStr, hasRunForScheduleToday } from '../u
 
 let currentBot = null;
 let workerStarted = false;
+let donoDivulgacaoCronJob = null;
 
 const unscheduleDonoDivulgacaoJob = () => {
   if (donoDivulgacaoCronJob && typeof donoDivulgacaoCronJob.stop === 'function') {

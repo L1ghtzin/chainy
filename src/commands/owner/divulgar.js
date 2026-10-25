@@ -1,12 +1,13 @@
 import { readAsync, writeAsync } from '../../utils/database/io.js';
+import { generateWAMessageFromContent } from 'baileys';
 export default {
   name: "divulgar",
   description: "Comandos de divulgação do dono do bot",
   commands: ["div", "divulgar", "setdiv", "divdono"],
-  handle: async ({ 
+  handle: async ({
     bot, from, command, args, reply, prefix, sender, q,
     isGroup, AllgroupMembers, DATABASE_DIR,
-    generateWAMessageFromContent, MESSAGES
+    MESSAGES
   }) => {
     const cmd = command.toLowerCase();
 

@@ -2,8 +2,8 @@ export default {
   name: "rpg",
   description: "Comandos de RPG e Economia",
   commands: ["achievementsbn", "box", "caixa", "conquistasbn", "denunciar", "gerarqrbn", "giftbn", "inventory", "lerqr", "medalhasbn", "nota", "notas", "note", "notes", "presente", "presentebn", "qrcodebn", "rankrep", "readqr", "repbn", "report", "reputacaobn", "scanqr", "toprep"],
-  handle: async ({ 
-    bot, from, info, command, args, reply, prefix, pushname, sender, menc_os2,
+  handle: async ({
+    bot, from, info, command, args, q, reply, prefix, pushname, sender, menc_os2,
     gifts, reputation, qrcode, achievements, notes,
     getEcoUser, loadEconomy, saveEconomy, checkEcoLevelUp, isGroupAdmin, isOwnerOrSub
   , MESSAGES }) => {

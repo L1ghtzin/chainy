@@ -1,3 +1,5 @@
+import { checkLevelUp, checkLevelDown } from '../../utils/database/leveling.js';
+
 export default {
   name: "leveling_management",
   description: "Gerenciamento de experiencia e nivel",
@@ -5,7 +7,7 @@ export default {
   handle: async ({
     bot, from, command, q, args, reply, menc_os2, getUserName,
     loadLevelingSafe, saveLevelingSafe, getLevelingUser,
-    checkLevelUp, checkLevelDown, MESSAGES
+    MESSAGES
   }) => {
     const cmd = command.toLowerCase();
 

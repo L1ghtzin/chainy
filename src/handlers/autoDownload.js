@@ -2,6 +2,8 @@
  * Handler de Auto-Download de mídias para URLs detectadas em mensagens.
  * Suporta: YouTube, TikTok, Instagram, Kwai, Facebook, Pinterest, Spotify, SoundCloud
  */
+import { MESSAGES } from '../utils/messages.js';
+
 export async function handleAutoDownload(bot, from, url, info, modules) {
   try {
     const { youtube, tiktok, igdl, kwai, facebook, pinterest, spotify, soundcloud } = modules;
