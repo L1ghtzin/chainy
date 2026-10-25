@@ -143,10 +143,11 @@ export default {
             const index = parseInt(argsList[0]) - 1;
             const newName = argsList.slice(1).join(' ').substring(0, 20);
             if (isNaN(index) || !newName) return reply(MESSAGES.rpg.pets.renameUsage(prefix));
-            
-            const pet = me.pets[index];
+            if (index < 0 || index >= (me.pets?.length || 0)) return reply(MESSAGES.rpg.pets.invalidPetNumber(prefix));
+
             if (me.wallet < 500) return reply(MESSAGES.rpg.pets.renameCost);
             me.wallet -= 500;
+            const pet = me.pets[index];
             const oldName = pet.name;
             pet.name = newName;
             saveEconomy(econ);

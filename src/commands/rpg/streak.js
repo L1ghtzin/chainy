@@ -21,12 +21,20 @@ export default {
     
     const econ = loadEconomy();
     const me = getEcoUser(econ, sender);
-    
-    if (!me.streak) me.streak = { current: 0, lastClaim: 0 };
-    
+
+    // Mesmo formato do !daily (count/record); migra o formato antigo (current)
+    // para nao corromper a carteira com NaN quando os dois comandos sao usados
+    if (!me.streak) me.streak = { count: 0, lastClaim: 0, record: 0 };
+    if (me.streak.current !== undefined) {
+      me.streak.count = me.streak.count ?? me.streak.current;
+      delete me.streak.current;
+    }
+    me.streak.count = me.streak.count || 0;
+    me.streak.lastClaim = me.streak.lastClaim || 0;
+
     const now = Date.now();
     const oneDay = 86400000;
-    
+
     if (now - me.streak.lastClaim < oneDay) {
       const remaining = oneDay - (now - me.streak.lastClaim);
       const hours = Math.floor(remaining / 3600000);
@@ -35,16 +43,17 @@ export default {
     }
 
     if (now - me.streak.lastClaim < oneDay * 2) {
-      me.streak.current++;
+      me.streak.count++;
     } else {
-      me.streak.current = 1;
+      me.streak.count = 1;
     }
-    
-    const reward = 1000 + (me.streak.current * 500);
+    if (!me.streak.record || me.streak.count > me.streak.record) me.streak.record = me.streak.count;
+
+    const reward = 1000 + (me.streak.count * 500);
     me.wallet += reward;
     me.streak.lastClaim = now;
-    
+
     saveEconomy(econ);
-    return reply(MESSAGES.rpg.streak.claimed(me.streak.current, reward.toLocaleString()));
+    return reply(MESSAGES.rpg.streak.claimed(me.streak.count, reward.toLocaleString()));
   }
 };

@@ -47,7 +47,8 @@ export default {
 
             const chance = Math.random();
             if (chance < 0.5) {
-                const amt = 50 + Math.floor(Math.random() * Math.max(1, maxSteal - 49));
+                // Nunca rouba mais do que a vítima tem (evita carteira negativa)
+                const amt = Math.min(maxSteal, 50 + Math.floor(Math.random() * Math.max(1, maxSteal - 49)));
                 target.wallet -= amt; 
                 me.wallet += amt;
                 me.cooldowns.rob = Date.now() + 10 * 60 * 1000;

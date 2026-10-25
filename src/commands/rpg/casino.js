@@ -143,7 +143,7 @@ export default {
       if (slot1 === slot2 && slot2 === slot3) {
         const multi = slot1 === '🍒' ? 5 : slot1 === '🍋' ? 8 : slot1 === '🍉' ? 12 : slot1 === '⭐' ? 20 : slot1 === '🔔' ? 15 : slot1 === '🍇' ? 10 : slot1 === '🍊' ? 6 : 4;
         const win = Math.floor(bet * multi);
-        me.wallet += win;
+        me.wallet += win - bet;
         msg += MESSAGES.rpg.casino.jackpotSlots(slot1, fmt(win), multi);
       } else if (slot1 === slot2 || slot2 === slot3 || slot1 === slot3) {
         const win = Math.floor(bet * 1.5);

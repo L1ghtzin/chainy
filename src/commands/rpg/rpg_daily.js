@@ -30,6 +30,13 @@ export default {
 
         // Sistema de Streak
         if (!me.streak) me.streak = { count: 0, lastClaim: 0, record: 0 };
+        // Migra o formato antigo gravado pelo !streak (current) para count
+        if (me.streak.current !== undefined) {
+            me.streak.count = me.streak.count ?? me.streak.current;
+            delete me.streak.current;
+        }
+        me.streak.count = me.streak.count || 0;
+        me.streak.record = me.streak.record || 0;
         
         const oneDayMs = 24 * 60 * 60 * 1000;
         const twoDaysMs = 48 * 60 * 60 * 1000;
