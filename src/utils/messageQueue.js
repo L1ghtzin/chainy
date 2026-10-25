@@ -11,6 +11,11 @@ class MessageQueue {
         this.activeWorkers = 0;
         this.isProcessing = false;
         this.errorHandler = null;
+        // Serialização por chat: mensagens do mesmo chat (grupo/PV) são
+        // processadas em ordem, uma por vez. Sem isso, dois comandos do
+        // mesmo grupo rodavam em paralelo (worker pool) e o save mais
+        // recente de groupData sobrescrevia as mutações do outro.
+        this.chatLocks = new Map();
         this.stats = {
             totalProcessed: 0,
             totalErrors: 0,
@@ -88,10 +93,29 @@ class MessageQueue {
         this.activeWorkers--;
     }
 
+    /**
+     * Executa fn em série para o chat indicado (encadeia na promise anterior).
+     * A entrada se auto-remove do Map quando a cadeia assenta e ninguém
+     * encadeou mais nada em cima dela.
+     */
+    _runSerialized(chatKey, fn) {
+        const previous = this.chatLocks.get(chatKey) ?? Promise.resolve();
+        const run = previous.then(fn, fn);
+        const next = run.then(() => {}, () => {});
+        next.then(() => {
+            if (this.chatLocks.get(chatKey) === next) this.chatLocks.delete(chatKey);
+        });
+        this.chatLocks.set(chatKey, next);
+        return run;
+    }
+
     async processItem(item) {
         const { message, processor, resolve, reject } = item;
+        const chatKey = message?.key?.remoteJid || null;
         try {
-            const result = await processor(message);
+            const result = chatKey
+                ? await this._runSerialized(chatKey, () => processor(message))
+                : await processor(message);
             resolve(result);
             return result;
         } catch (error) {
