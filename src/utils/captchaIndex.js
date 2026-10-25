@@ -123,8 +123,11 @@ function saveIndex(del = false) {
    saveTimeout = setTimeout(async () => {
       try {
          const data = Object.fromEntries(captchaIndex);
-         let readCap = existsSync(INDEX_FILE) ? await fs.readFile(INDEX_FILE, "utf-8") : {};
-         readCap = del ? data : Object.assign(JSON.parse(readCap), data);
+         let base = {};
+         if (!del && existsSync(INDEX_FILE)) {
+            base = JSON.parse(await fs.readFile(INDEX_FILE, "utf-8"));
+         }
+         const readCap = del ? data : Object.assign(base, data);
          await fs.writeFile(INDEX_FILE, JSON.stringify(readCap, null, '\t'), 'utf-8');
       } catch (error) {
          console.error('[CaptchaIndex] Erro ao salvar índice:', error.message);

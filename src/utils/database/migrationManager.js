@@ -222,6 +222,9 @@ export async function runDatabaseConsolidation() {
           notificationTarget: alugueisData.notificationTarget || ownerConfig.alugueis?.notificationTarget || 'ambos',
           groups: { ...(ownerConfig.alugueis?.groups || {}), ...(alugueisData.groups || {}) }
         };
+        // Regrava: o ownerConfig.json consolidado foi salvo antes deste bloco,
+        // sem isso os alugueis migrados ficavam só em memória e eram perdidos
+        writeSafe(OWNER_CONFIG_FILE, ownerConfig);
         console.log('✅ [CONSOLIDAÇÃO] alugueis.json migrado para ownerConfig.json com sucesso.');
       }
       fs.unlinkSync(ALUGUEIS_FILE);

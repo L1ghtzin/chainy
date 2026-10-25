@@ -459,14 +459,17 @@ export function debouncedSaveJson(filePath, data, delayMs = 3000) {
 }
 
 /**
- * Força salvar todos os debounces pendentes (útil no exit)
+ * Força salvar todos os debounces pendentes (útil no exit).
+ * Retorna uma Promise que resolve quando todas as gravações terminarem,
+ * permitindo aguardar o flush antes de process.exit().
  */
 export function flushAllDebouncedSaves() {
+  const writes = [];
   for (const [filePath, dataObj] of pendingData.entries()) {
     try {
-      writeJsonFileAsync(filePath, dataObj).catch(e => {
+      writes.push(writeJsonFileAsync(filePath, dataObj).catch(e => {
         console.error(`Erro no flush final de ${filePath}`, e);
-      });
+      }));
     } catch (e) {
       console.error(`Erro no flush final de ${filePath}`, e);
     }
@@ -474,4 +477,5 @@ export function flushAllDebouncedSaves() {
   pendingData.clear();
   for (const timer of saveTimers.values()) clearTimeout(timer);
   saveTimers.clear();
+  return Promise.all(writes);
 }

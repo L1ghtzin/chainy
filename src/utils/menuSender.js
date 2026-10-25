@@ -1,5 +1,6 @@
 import fs from 'fs';
 import pathz from 'path';
+import { ROOT_DIR } from './paths.js';
 
 export async function sendMenuWithMedia({
   bot,
@@ -39,8 +40,8 @@ export async function sendMenuWithMedia({
     useVideo = false;
     mediaBuffer = fs.readFileSync(mediaPath);
   } else {
-    const menuVideoPath = pathz.join(process.cwd(), 'dados/midias/menu.mp4');
-    const menuImagePath = pathz.join(process.cwd(), 'dados/midias/menu.jpg');
+    const menuVideoPath = pathz.join(ROOT_DIR, 'dados', 'midias', 'menu.mp4');
+    const menuImagePath = pathz.join(ROOT_DIR, 'dados', 'midias', 'menu.jpg');
     useVideo = fs.existsSync(menuVideoPath);
     mediaPath = useVideo ? menuVideoPath : menuImagePath;
     mediaBuffer = fs.readFileSync(mediaPath);

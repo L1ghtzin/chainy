@@ -593,6 +593,11 @@ async function gracefulShutdown(signal) {
     }, 15000);
     
     try {
+        // Grava os saves debounced pendentes (economia, leveling, etc.)
+        // antes de encerrar — sem isso os últimos 1-5s de dados eram perdidos
+        await db.flush();
+        console.log('💾 Banco de dados gravado');
+
         // Fecha conexão do socket graciosamente
         if (sock) {
             console.log('🔌 Fechando conexão com o WhatsApp...');
@@ -632,7 +637,9 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 process.on('uncaughtException', async (error) => {
     console.error('🚨 Erro não capturado — reiniciando processo:', error.message);
     console.error(error.stack);
-    
+    try { await db.flush(); } catch (flushError) {
+      console.error('❌ Falha ao gravar banco no crash:', flushError.message);
+    }
     process.exit(1);
 });
 
