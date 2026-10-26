@@ -4,7 +4,7 @@ import path from 'path';
 import qrcode from 'qrcode-terminal';
 import { Boom } from '@hapi/boom';
 import { DisconnectReason } from 'baileys';
-import { updateOwnerLid, performMigration, migrateBlacklists } from '../utils/migration.js';
+import { updateOwnerLid } from '../utils/migration.js';
 import { loadMsgBotOn } from '../utils/database.js';
 import { buildUserId } from '../utils/helpers.js';
 import { startAllWorkers } from '../workers/index.js';
@@ -56,7 +56,6 @@ export async function handleConnectionUpdate(ChainySock, update, {
   attachMessagesListener,
   setupMessagesCacheCleanup,
   initializeOptimizedCaches,
-  DATABASE_DIR,
   reconnectState,
   startChainy,
   clearAuthDir,
@@ -93,16 +92,7 @@ export async function handleConnectionUpdate(ChainySock, update, {
       startAllWorkers(ChainySock);
       
       await updateOwnerLid(ChainySock, numerodono, config, configPath);
-      
-      setTimeout(() => {
-        performMigration(ChainySock, DATABASE_DIR, configPath).catch(err => {
-          console.error('❌ Erro na migração (não-bloqueante):', err.message);
-        });
-        migrateBlacklists(ChainySock, DATABASE_DIR).catch(err => {
-          console.error('❌ Erro na migração de blacklists (não-bloqueante):', err.message);
-        });
-      }, 10000);
-      
+
       rentalExpirationManager.bot = ChainySock;
       await rentalExpirationManager.initialize();
       

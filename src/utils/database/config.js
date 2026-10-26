@@ -378,30 +378,7 @@ export const getSubdonos = () => {
 // ==================== GLOBAL BLACKLIST ====================
 
 export const loadGlobalBlacklist = () => {
-  const data = loadJsonFile(GLOBAL_BLACKLIST_FILE, { users: [], groups: [] });
-  // Se 'users' ainda for um objeto legatório, converte para array
-  if (data && data.users && !Array.isArray(data.users)) {
-    const arrayUsers = [];
-    for (const [key, entry] of Object.entries(data.users)) {
-      const cleanJid = key.endsWith('@s.whatsapp.net') ? key : null;
-      const cleanLid = key.endsWith('@lid') ? key : null;
-      
-      const existing = arrayUsers.find(u => (cleanLid && u.lid === cleanLid) || (cleanJid && u.number === cleanJid.replace(/\D/g, '')));
-      if (!existing) {
-        arrayUsers.push({
-          lid: cleanLid || '',
-          number: cleanJid ? cleanJid.replace(/\D/g, '') : '',
-          name: entry.addedBy || '',
-          reason: entry.reason || '',
-          createdAt: entry.addedAt || new Date().toISOString(),
-          createdBy: entry.addedBy || 'Desconhecido'
-        });
-      }
-    }
-    data.users = arrayUsers;
-    saveGlobalBlacklist(data);
-  }
-  return data;
+  return loadJsonFile(GLOBAL_BLACKLIST_FILE, { users: [], groups: [] });
 };
 
 export const saveGlobalBlacklist = async data => {

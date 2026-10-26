@@ -6,10 +6,6 @@
 
 // Inicialização (executa side-effects como criação de diretórios e arquivos JSON padrão)
 import './database/_init.js';
-import { runDatabaseConsolidation, migrateGroupActivities } from './database/migrationManager.js';
-
-await runDatabaseConsolidation();
-await migrateGroupActivities();
 
 // Exportações dos sub-módulos
 export * from './database/_core.js';

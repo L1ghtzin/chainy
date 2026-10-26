@@ -29,7 +29,6 @@ import { buildUserId, normalizeMessageContent } from './utils/helpers.js';
 import { initCaptchaIndex } from './utils/captchaIndex.js';
 import CaptchaIndex from './utils/captchaIndex.js';
 import MessageQueue from './utils/messageQueue.js';
-import { performMigration, updateOwnerLid, migrateBlacklists } from './utils/migration.js';
 import { handleGroupParticipantsUpdate } from './handlers/groupParticipantsUpdate.js';
 import { handleGroupJoinRequest } from './handlers/groupJoinRequest.js';
 import { handleConnectionUpdate } from './handlers/connectionEvents.js';
@@ -502,7 +501,6 @@ async function createBotSocket(authDir) {
             attachMessagesListener,
             setupMessagesCacheCleanup,
             initializeOptimizedCaches,
-            DATABASE_DIR,
             reconnectState,
             startChainy,
             clearAuthDir,
