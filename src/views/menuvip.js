@@ -15,12 +15,12 @@ async function menuVIP(prefix, botName = "MeuBot", userName = "Usuário", {
   try {
     const grouped = groupVipCommandsByCategory();
     const stats = getVipStats();
-    
+
     let formattedHeader = header
     .replace(/#nome#/g, userName)
     .replace(/#user#/g, userName)
     .replace(/#prefix#/g, prefix);
-    
+
     let menu = `${formattedHeader}
 
 `;
@@ -61,89 +61,4 @@ ${bottomBorder}
   }
 }
 
-async function menuVIPInfo(prefix, botName = "MeuBot", userName = "Usuário", {
-  header = `╭┈⊰ 🫟 『 *${botName}* 』\n┊Olá, #user#!\n╰─┈┈┈┈┈◜❁◞┈┈┈┈┈─╯`,
-  menuTopBorder = "╭┈",
-  bottomBorder = "╰─┈┈┈┈┈◜❁◞┈┈┈┈┈─╯",
-  separatorIcon = "❁",
-  middleBorder = "┊"
-} = {}) {
-  const stats = getVipStats();
-  const formattedHeader = header.replace(/#user#/g, userName);
-  
-  let info = `${formattedHeader}
-
-${menuTopBorder}${separatorIcon} *📊 ESTATÍSTICAS*
-${middleBorder}
-${middleBorder}• Ativos: ${stats.active}
-${middleBorder}• Inativos: ${stats.inactive}
-${middleBorder}• Total: ${stats.total}
-${middleBorder}• Categorias: ${stats.categories}
-${bottomBorder}
-
-${menuTopBorder}${separatorIcon} *💎 COMO SER VIP*
-${middleBorder}
-${middleBorder}1. Contate o dono
-${middleBorder}2. ${prefix}dono
-${middleBorder}3. Solicite acesso VIP
-${bottomBorder}
-
-${menuTopBorder}${separatorIcon} *✨ BENEFÍCIOS*
-${middleBorder}
-${middleBorder}✅ Comandos exclusivos
-${middleBorder}✅ Sem limites
-${middleBorder}✅ Prioridade
-${middleBorder}✅ Suporte dedicado
-${bottomBorder}
-`;
-
-  return info;
-}
-
-async function listVIPCommands(prefix, botName = "MeuBot", userName = "Usuário", {
-  header = `╭┈⊰ 🫟 『 *${botName}* 』\n┊Olá, #user#!\n╰─┈┈┈┈┈◜❁◞┈┈┈┈┈─╯`,
-  menuTopBorder = "╭┈",
-  bottomBorder = "╰─┈┈┈┈┈◜❁◞┈┈┈┈┈─╯",
-  menuItemIcon = "•.̇𖥨֗🫟⭟",
-  separatorIcon = "❁",
-  middleBorder = "┊"
-} = {}) {
-  const grouped = groupVipCommandsByCategory();
-  const stats = getVipStats();
-  const formattedHeader = header.replace(/#user#/g, userName);
-  
-  if (stats.active === 0) {
-    return `📭 Nenhum comando VIP cadastrado.
-
-${prefix}addcmdvip <cmd> | <desc> | <cat>
-
-Categorias: download, diversão, utilidade, ia, editor, info, outros`;
-  }
-  
-  let list = `${formattedHeader}
-
-${menuTopBorder}${separatorIcon} *👑 COMANDOS VIP*
-${middleBorder}
-${middleBorder}Total: ${stats.active}
-${middleBorder}Categorias: ${stats.categories}
-${bottomBorder}
-
-`;
-
-  Object.entries(grouped).forEach(([categoryKey, categoryData]) => {
-    list += `${menuTopBorder}${separatorIcon} *${categoryData.label}*\n${middleBorder}\n`;
-    categoryData.commands.forEach((cmd) => {
-      list += `${middleBorder}${menuItemIcon}${cmd.command}\n`;
-      list += `${middleBorder}   └─ ${cmd.description}\n`;
-    });
-    list += `${bottomBorder}\n\n`;
-  });
-
-  return list;
-}
-
-export {
-  menuVIP,
-  menuVIPInfo,
-  listVIPCommands
-};
+export { menuVIP };

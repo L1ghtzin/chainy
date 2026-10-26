@@ -201,7 +201,7 @@ function addCaptcha(obj, groupId, answer, expiresAt, userlid, groupFile = null) 
 function releaseCaptchaLock(captcha) {
    if (!captcha || !global.CAPTCHA_LOCK) return;
    const variants = new Set(
-      [captcha.id, captcha.lid, captcha.participant, captcha.idOrigin]
+      [captcha.id, captcha.lid, captcha.idOrigin]
          .filter(Boolean)
          .map(String)
          .flatMap((key) => [key, `${key.replace(/@.*/, '')}@s.whatsapp.net`])
