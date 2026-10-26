@@ -767,7 +767,8 @@ export async function buildMessageContext(bot, info, store, messagesCache, renta
         botNumber: botNumberLid?.substring(0, 30)
       });
     }
-    const isModoBn = groupData.modobrincadeira;
+    // Mesma cadeia de fun.js/relationship.js: modobn primário, modobrincadeira legado, ativo por padrão
+    const isModoBn = groupData.modobn ?? groupData.modobrincadeira ?? true;
     const isOnlyAdmin = groupData.soadm;
     const soadmBypassCommands = ['suporte', 'ticketsuporte', 'suporteticket', 'ticket'];
 

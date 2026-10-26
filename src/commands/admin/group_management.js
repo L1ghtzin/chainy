@@ -266,9 +266,12 @@ export default {
     }
 
     if (['modobrincadeira', 'modobrincadeiras', 'modobn', 'gamemode'].includes(cmd)) {
-      groupData.modobrincadeira = !groupData.modobrincadeira;
+      // Chave primária é modobn; modobrincadeira é legado (lido como fallback)
+      const current = groupData.modobn ?? groupData.modobrincadeira ?? true;
+      groupData.modobn = !current;
+      delete groupData.modobrincadeira;
       await writeAsync(groupFile, groupData);
-      return reply(MESSAGES.admin.group_management.config.gameModeToggle(groupData.modobrincadeira));
+      return reply(MESSAGES.admin.group_management.config.gameModeToggle(groupData.modobn));
     }
 
     if (['limitmessage', 'dellimitmessage'].includes(cmd)) {
