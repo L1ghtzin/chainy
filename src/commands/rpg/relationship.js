@@ -24,9 +24,8 @@ export default {
   }) => {
     if (!isGroup) return reply(MESSAGES.permission.groupOnly);
     
-    // Ativo por padrão (?? true), mas respeita o !modobn do grupo quando
-    // o admin desativou explicitamente (o "|| true" antigo ignorava o toggle)
-    const isModoBn = groupData.modobn ?? groupData.modobrincadeira ?? true;
+    // Ativo por padrão (?? true), mas respeita o !modobn do grupo
+    const isModoBn = groupData.modobn ?? true;
     if (!isModoBn) return reply(MESSAGES.rpg.relationship.disableBn);
 
 

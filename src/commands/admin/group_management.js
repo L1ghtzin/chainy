@@ -266,10 +266,7 @@ export default {
     }
 
     if (['modobrincadeira', 'modobrincadeiras', 'modobn', 'gamemode'].includes(cmd)) {
-      // Chave primária é modobn; modobrincadeira é legado (lido como fallback)
-      const current = groupData.modobn ?? groupData.modobrincadeira ?? true;
-      groupData.modobn = !current;
-      delete groupData.modobrincadeira;
+      groupData.modobn = !(groupData.modobn ?? true);
       await writeAsync(groupFile, groupData);
       return reply(MESSAGES.admin.group_management.config.gameModeToggle(groupData.modobn));
     }

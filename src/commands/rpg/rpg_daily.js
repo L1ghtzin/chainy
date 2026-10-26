@@ -30,11 +30,6 @@ export default {
 
         // Sistema de Streak
         if (!me.streak) me.streak = { count: 0, lastClaim: 0, record: 0 };
-        // Migra o formato antigo gravado pelo !streak (current) para count
-        if (me.streak.current !== undefined) {
-            me.streak.count = me.streak.count ?? me.streak.current;
-            delete me.streak.current;
-        }
         me.streak.count = me.streak.count || 0;
         me.streak.record = me.streak.record || 0;
         

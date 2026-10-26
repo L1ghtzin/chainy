@@ -22,13 +22,8 @@ export default {
     const econ = loadEconomy();
     const me = getEcoUser(econ, sender);
 
-    // Mesmo formato do !daily (count/record); migra o formato antigo (current)
-    // para nao corromper a carteira com NaN quando os dois comandos sao usados
+    // Mesmo formato do !daily (count/record/lastClaim)
     if (!me.streak) me.streak = { count: 0, lastClaim: 0, record: 0 };
-    if (me.streak.current !== undefined) {
-      me.streak.count = me.streak.count ?? me.streak.current;
-      delete me.streak.current;
-    }
     me.streak.count = me.streak.count || 0;
     me.streak.lastClaim = me.streak.lastClaim || 0;
 
