@@ -2,7 +2,7 @@ import { menuVIP } from '../../views/menuvip.js';
 
 export default {
   name: "vip_info",
-  description: "Consulta informaÃ§Ãµes e menus de comandos VIP",
+  description: "Consulta informações e menus de comandos VIP",
   commands: ["comandosvip", "infovip", "listcmdvip", "listvipcommands", "vip", "vipinfo", "vipmenu"],
   handle: async ({
     reply,

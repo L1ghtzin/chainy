@@ -84,7 +84,7 @@ export default {
     }
 
     // Ativo por padrão (?? true), mas respeita o !modobn do grupo quando
-    // o admin desativou explicitamente (o "|| true" antigo ignava o toggle)
+    // o admin desativou explicitamente (o "|| true" antigo ignorava o toggle)
     const isModoBn = groupData.modobn ?? groupData.modobrincadeira ?? true;
     if (!isModoBn) return reply(MESSAGES.error.modoBnDisabled);
 
